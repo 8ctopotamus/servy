@@ -12,6 +12,7 @@ defmodule Servy.Handler do
       |> String.split("\n")
       |> List.first
       |> String.split(" ")
+
     %{ method: method, path: path, resp_body: "" }
   end
 
