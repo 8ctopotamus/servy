@@ -41,6 +41,10 @@ defmodule Servy.Handler do
     %{ conv | status: 200, resp_body: "Teddy, Smokey, Paddington" }
   end
 
+  def route(conv, "GET", "/bears/" <> id) do
+    %{ conv | status: 200, resp_body: "Bear #{id}" }
+  end
+
   def route(conv, _method, path) do
     %{ conv | status: 404, resp_body: "No #{path} here!" }
   end
@@ -67,26 +71,8 @@ defmodule Servy.Handler do
   end
 end
 
-# copy these into iex to test
-
-# request = """
-# GET /wildthings HTTP/1.1
-# Host: example.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-
-# """
-
-# request = """
-# GET /bears HTTP/1.1
-# Host: example.com
-# User-Agent: ExampleBrowser/1.0
-# Accept: */*
-
-# """
-
 request = """
-GET /bigfoot HTTP/1.1
+GET /wildthings HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
@@ -94,4 +80,29 @@ Accept: */*
 """
 
 response = Servy.Handler.handle(request)
-IO.inspect response
+IO.puts response
+IO.puts "~~~\n"
+
+request = """
+GET /bears HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response = Servy.Handler.handle(request)
+IO.puts response
+IO.puts "~~~\n"
+
+request = """
+GET /bears/1 HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response = Servy.Handler.handle(request)
+IO.puts response
+IO.puts "~~~\n"
