@@ -23,13 +23,17 @@ defmodule Servy.Handler do
   def route(conv) do
     route(conv, conv.method, conv.path)
   end
-  # function clauses
+
   def route(conv, "GET", "/wildthings") do
     %{ conv | resp_body: "Bears, Lions, Tigers" }
   end
 
   def route(conv, "GET", "/bears") do
     %{ conv | resp_body: "Teddy, Smokey, Paddington" }
+  end
+
+  def route(conv, _method, path) do
+    %{ conv | resp_body: "No #{path} here!" }
   end
 
   def format_response(conv) do
