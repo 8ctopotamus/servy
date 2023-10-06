@@ -2,10 +2,15 @@ defmodule Servy.Handler do
   def handle(request) do
     request
     |> parse
+    |> rewrite_path
     |> log
     |> route
     |> log
     |> format_response
+  end
+
+  def rewrite_path(conv) do
+    %{ conv | path: "/wildthings" }
   end
 
   def log(conv), do: IO.inspect conv
@@ -29,10 +34,6 @@ defmodule Servy.Handler do
     route(conv, conv.method, conv.path)
   end
 
-  @spec route(%{:resp_body => any, optional(any) => any}, any, any) :: %{
-          :resp_body => <<_::64, _::_*8>>,
-          optional(any) => any
-        }
   def route(conv, "GET", "/wildthings") do
     %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
   end
@@ -97,6 +98,18 @@ IO.puts "~~~\n"
 
 request = """
 GET /bears/1 HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response = Servy.Handler.handle(request)
+IO.puts response
+IO.puts "~~~\n"
+
+request = """
+GET /wildlife HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
